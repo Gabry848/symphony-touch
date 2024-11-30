@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electron Music Player</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'>
+    <link rel="stylesheet" href="../css/play.css">
+</head>
+
+<body>
+    <div class="rouded">
+        <div class="bar">
+            <button class="menu-btn" id="minimaze">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-minimize-2">
+                    <polyline points="4 14 10 14 10 20" />
+                    <polyline points="20 10 14 10 14 4" />
+                    <line x1="14" x2="21" y1="10" y2="3" />
+                    <line x1="3" x2="10" y1="21" y2="14" />
+                </svg>
+            </button>
+            <button class="menu-btn" id="restore">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-maximize">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                    <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                    <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                    <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                </svg>
+            </button>
+            <button class="menu-btn" id="close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-circle-x">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="m15 9-6 6" />
+                    <path d="m9 9 6 6" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="app-cover">
+        <div id="bg-artwork"></div>
+        <div id="bg-layer"></div>
+        <div id="player">
+            <div id="player-track">
+                <div id="album-name"></div>
+                <div id="track-name"></div>
+                <div id="track-time">
+                    <div id="current-time"></div>
+                    <div id="track-length"></div>
+                </div>
+                <div id="s-area">
+                    <div id="ins-time"></div>
+                    <div id="s-hover"></div>
+                    <div id="seek-bar"></div>
+                </div>
+            </div>
+            <div id="player-content">
+                <div id="album-art">
+                    <img src="https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
+                        class="active" id="_1">
+                    <div id="buffer-box">Buffering ...</div>
+                </div>
+                <div id="player-controls">
+                    <div class="control">
+                        <div class="button" id="play-previous">
+                            <i class="fas fa-backward"></i>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <div class="button" id="play-pause-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <div class="button" id="play-next">
+                            <i class="fas fa-forward"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        // document.getElementById('PlayButton').addEventListener('click', () => {
+        //     ipcRenderer.send('play-music');
+        // });
+
+        ipcRenderer.on('music-status', (event, status) => {
+            alert(`Music is now ${status}`);
+        });
+        // event ipcrenderer per barra della finestra
+        let buttonmin = document.getElementById("minimaze");
+        let buttonres = document.getElementById("restore");
+        let buttonmax = document.getElementById("close");
+
+        buttonmin.addEventListener("click", () => {
+            ipcRenderer.send("window:minimize");
+        });
+        buttonres.addEventListener("click", () => {
+            ipcRenderer.send("window:restore");
+        });
+        buttonmax.addEventListener("click", () => {
+            ipcRenderer.send("window:close");
+        });
+
+        // Aggiungi il listener per il click su app-cover
+        let appCover = document.getElementById("play-pause-button");
+        appCover.addEventListener("click", () => {
+            ipcRenderer.send("music:play");
+            console.log("playyyy");
+        });
+    </script>
+
+</body>
+
+</html>
