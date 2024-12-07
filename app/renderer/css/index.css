@@ -1,26 +1,14 @@
-.play-button {
-    width: 50px;
-    height: 50px;
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 50%;
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #000;
     color: white;
-    font-size: 20px;
-    text-align: center;
-    line-height: 50px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
-
-.play-button:hover {
-    background-color: #45a049;
-}
-
 .bar {
     -webkit-app-region: drag;
     height: 60px;
     width: 100%;
-    background-color: black;
+    background-color: #333;
     text-align: right;
     position: relative;
     border-radius: 10px;
@@ -44,4 +32,56 @@
     background-color: #333;
     border-color: #333;
     border-width: 0px;
+}
+
+#sidebar {
+    position: fixed;
+    right: 10px;
+    top: 80px;
+    bottom: 10px;
+    width: 200px;
+    height: auto;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    display: grid;
+    align-items: start;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* personalizza la scrollbar */
+#sidebar::-webkit-scrollbar {
+    width: 10px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 3px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: #888;
+}
+
+/* #sidebar h2 {
+    margin-top: 0;
+} */
+
+.song-list {
+    /* list-style: none; */
+    padding: 0;
+}
+
+.song-list div {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+}
+
+.song-list div:hover {
+    background-color: #000000;
 }

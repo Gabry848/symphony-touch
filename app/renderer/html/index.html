@@ -88,48 +88,34 @@
             </div>
         </div>
     </div>
-    <script>
-        const { ipcRenderer } = require('electron');
 
-        // document.getElementById('PlayButton').addEventListener('click', () => {
-        //     ipcRenderer.send('play-music');
-        // });
+    <div id="sidebar">
+        <div class="container">
+            <h2>Playlist</h2>
+            <div class="song-list"></div>
 
-        ipcRenderer.on('music-status', (event, status) => {
-            alert(`Music is now ${status}`);
-        });
-        // event ipcrenderer per barra della finestra
-        let buttonmin = document.getElementById("minimaze");
-        let buttonres = document.getElementById("restore");
-        let buttonmax = document.getElementById("close");
+        </div>
+        <div id="file">Add music</div>
+    </div>
 
-        buttonmin.addEventListener("click", () => {
-            ipcRenderer.send("window:minimize");
-        });
-        buttonres.addEventListener("click", () => {
-            ipcRenderer.send("window:restore");
-        });
-        buttonmax.addEventListener("click", () => {
-            ipcRenderer.send("window:close");
-        });
+    <style>
+        #file {
+            position: absolute;
+            bottom: 13px;
+            right: 13px;
+            border-radius: 10px;
+            border-color: black;
+            padding: 10px;
+            background-color: gray;
+            cursor: pointer;
+        }
 
+        #file:hover {
+            background-color: black;
+        }
+    </style>
 
-        // Aggiungi il listener per il click su app-cover
-        let playButton = document.getElementById("play-pause-button");
-        playButton.addEventListener("click", () => {
-            ipcRenderer.send("music:play");
-        });
-
-        let next = document.getElementById("play-next");
-        next.addEventListener("click", () => {
-            ipcRenderer.send("music:next");
-        });
-
-        let previous = document.getElementById("play-previous");
-        previous.addEventListener("click", () => {
-            ipcRenderer.send("music:previous");
-        });
-    </script>
+    <script src="../scripts/rederer.js"></script>
 
 </body>
 
