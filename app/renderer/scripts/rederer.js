@@ -1,6 +1,7 @@
 const { ipcRenderer } = require("electron");
 
 const PlayList = require("../scripts/PlayList.js");
+const SideBar = require("../scripts/sidebar.js");
 
 // event ipcrenderer per barra della finestra
 let buttonmin = document.getElementById("minimaze");
@@ -27,25 +28,7 @@ ipcRenderer.on("get-audio-list", (e, arg) => {
         audioList,
         () => {},
         () => {
-            console.log("All files loaded"); 
-            let index = 0;
-            myPlayList.audioList.forEach((audio) => {
-                console.log(audio);
-                console.log(audio.duration());
-                console.log(index);
-                const song = document.createElement("div");
-                song.classList.add("song");
-                song.addEventListener("click", () => {
-                    myPlayList.playIndex(myPlayList.audioList.indexOf(audio));
-                });
-                song.innerHTML = `
-                    <div class="song-index">${index}</div>
-                    <div class="song-title">Title</div>
-                    <div class="song-duration">${audio.duration()}</div>
-                `;
-                songList.appendChild(song);
-                index++;
-            });
+            SideBar.addSongsToSidebar(myPlayList, songList);
         }
     );
 });
@@ -68,11 +51,14 @@ playButton.addEventListener("click", () => {
 });
 
 // Aggiungi il listener per il click su app-cover (per aggiungere file)
-document.getElementById('file').addEventListener('click', () => {
-    ipcRenderer.send('select-file');
+document.getElementById("file").addEventListener("click", () => {
+    ipcRenderer.send("select-file");
 });
 
-// ipcRenderer.on('select-file', (event, path) => {
-//     console.log(path);
-//     ipcRenderer.send('add-music', path);
-// });
+ipcRenderer.on("sidebar:reload", (event, path) => {
+    SideBar.clearSidebar(songList);
+    myPlayList.addSong(path, () => {
+        SideBar.addSongsToSidebar(myPlayList, songList);
+        console.log("sidebar reloaded");
+    });
+});

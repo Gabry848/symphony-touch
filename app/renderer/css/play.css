@@ -11,8 +11,8 @@
     position: absolute;
     top: 50%;
     right: 0;
-    left: 0;
-    width: 430px;
+    left: -30%;
+    width: 400px;
     height: 100px;
     margin: -4px auto;
 }
@@ -353,3 +353,4 @@
 {
     color: #fff;
 }
+

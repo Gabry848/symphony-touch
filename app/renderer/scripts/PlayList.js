@@ -46,10 +46,11 @@ class PlayList {
                 new Howler.Howl({
                     src: [audioPath],
                     html5: true,
+                    volume: 1,
                     onload: () => {
                         // se ha caricato tutti i file allora richiama la funzione di callback
                         if (i == list.length - 1) {
-                            myonLoad();
+                           myonLoad();
                         }
                     },
                     onloaderror: (id, error) => {
@@ -123,6 +124,33 @@ class PlayList {
         if (this.loop) {
             this.play();
         }
+    }
+
+    addSong(audioPath, myOnLoad = () => {}) {
+        this.audioList.push(
+            new Howler.Howl({
+                src: [audioPath],
+                html5: true,
+                volume: 1,
+                onload: () => {
+                    console.log("File caricato");
+                    myOnLoad();
+                },
+                onloaderror: (id, error) => {
+                    console.error(
+                        `Errore nel caricamento del file: ${error}`
+                    );
+                    ipcRenderer.send("audio-error", {
+                        audioPath: audioPath,
+                        error: error,
+                    });
+                },
+                onend: () => {
+                    console.log("Audio ended");
+                    this.onAudioEnded();
+                },
+            })
+        );
     }
 }
 

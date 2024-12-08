@@ -99,5 +99,10 @@ ipcMain.on("get-audio-list", (e) => {
 
 // add music
 ipcMain.on("select-file", (e, path) => {
-    music.addMusic(win);
+    music.addMusicInJson(win, (filePath)=>{
+        console.log("select-file");
+        win.webContents.send("sidebar:reload", filePath);
+    });
+    
 });
+
