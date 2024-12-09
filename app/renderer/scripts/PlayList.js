@@ -37,7 +37,7 @@ class PlayList {
      *
      * If an error occurs during the loading of an audio file, an IPC message is sent with the error details.
      */
-    getAudioList(list, onEndFunction = () => {}, myonLoad = (duration) => {}) {
+    getAudioList(list, onEndFunction = () => {}, myonLoad = () => {}) {
         for (let i = 0; i < list.length; i++) {
             let audioPath = list[i];
 
@@ -152,6 +152,25 @@ class PlayList {
             })
         );
     }
+
+    playNext(){
+        if (this.index >= this.audioList.length-1){
+            this.index = 0
+        } else {
+           this.index++; 
+        }
+        this.play()
+    }
+
+    playPrevious(){
+        if (this.index <= 0){
+            this.index = this.audioList.length-1
+        } else {
+            this.index--;
+        }
+        this.play()
+    }
+
 }
 
 module.exports = PlayList;

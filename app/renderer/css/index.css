@@ -2,7 +2,11 @@
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #000;
+    background-image: url('../assets/image/background/11.png');
+    background-size: cover;
+    background-position:top;
 }
+
 .bar {
     -webkit-app-region: drag;
     height: 60px;
@@ -11,6 +15,7 @@ body {
     text-align: right;
     position: relative;
     border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.4);
 }
 
 .rouded {
@@ -33,6 +38,30 @@ body {
     border-width: 0px;
 }
 
+#title {
+    font-size: 20px;
+    color: white;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Roboto', sans-serif;
+}
+
+#logo {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0, -50%);
+    background-image: url('../assets/image/icons/logo.png');  
+    background-size: cover;
+    background-position:center;
+}
+
 #sidebar {
     position: fixed;
     right: 10px;
@@ -49,6 +78,7 @@ body {
     align-items: start;
     overflow-y:auto;
     overflow-x: hidden;
+    opacity: 0.95;
 }
 
 /* #sidebar h2 {
@@ -76,18 +106,20 @@ body {
     background-color: #888;
 }
 
-.song-list div {
-    /* padding: 10px; */
+.item {
+    padding: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 10px;
+    margin: 10px;
     cursor: pointer;
     border-radius: 10px;
+    border: solid 1px rgb(129, 129, 129);
     display: flex;
 }
 
 .song-list div:hover {
-    background-color: #000000;
+    background-color: rgb(129, 129, 129);
 }
 
 .song-duration {
@@ -99,13 +131,15 @@ body {
     bottom: 13px;
     right: 13px;
     border-radius: 10px;
-    border-color: black;
     padding: 10px;
-    background-color: gray;
+    color: white;
+    background-color: #333;
+    border: solid 1px rgb(129, 129, 129);
+    opacity: 1;
     cursor: pointer;
 }
 
 #file:hover {
-    background-color: black;
+    background-color: rgb(129, 129, 129);
     color: white;
 }

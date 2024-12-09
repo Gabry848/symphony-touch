@@ -12,7 +12,7 @@
     top: 50%;
     right: 0;
     left: -30%;
-    width: 400px;
+    width: 430px;
     height: 100px;
     margin: -4px auto;
 }
@@ -59,7 +59,7 @@
     right: 15px;
     left: 15px;
     padding: 13px 22px 10px 184px;
-    background-color: #fff7f7;
+    background-color: #2c2c2c;
     border-radius: 15px 15px 0 0;
     -webkit-transition: 0.3s ease top;
     transition: 0.3s ease top;
@@ -73,10 +73,10 @@
 
 #album-name
 {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-    color: #54576f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #e0e0e0;
     font-size: 17px;
     font-weight: bold;
 }

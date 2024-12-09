@@ -1,5 +1,5 @@
 {
-  "name": "player",
+  "name": "symphony-touch",
   "version": "1.0.0",
   "description": "A music player",
   "main": "app/main/main.js",

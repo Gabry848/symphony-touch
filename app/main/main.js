@@ -22,11 +22,11 @@ function createWindow() {
             contextIsolation: false,
         },
         //icon: path.join(__dirname, 'assets', 'img', 'icon.png'),
-        title: "MusicPlayer",
+        title: "Symphony Touch",
         frame: false,
     });
 
-    win.setTitle("MusicPlayer");
+    win.setTitle("Symphony Touch");
     win.loadFile("app\\renderer\\html\\index.html");
 
     //win.webContents.openDevTools();
@@ -42,8 +42,8 @@ app.whenReady().then(() => {
         "app\\renderer\\assets\\image\\icons\\logo.png"
     );
     let tray = new Tray(icon);
-    tray.setTitle("MusicPlayer");
-    tray.setToolTip("MusicPlayer");
+    tray.setTitle("Symphony Touch");
+    tray.setToolTip("Symphony Touch");
     tray.on("double-click", () => {
         win.show();
     });

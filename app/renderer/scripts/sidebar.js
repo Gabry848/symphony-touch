@@ -4,7 +4,7 @@ module.exports = {};
 
 function truncateString(str, maxLength) {
     if (str.length > maxLength) {
-        return str.slice(0, maxLength) + '...';
+        return str.slice(0, maxLength) + "...";
     }
     return str;
 }
@@ -29,15 +29,19 @@ module.exports.addSongsToSidebar = (playList, songList) => {
         song.addEventListener("click", () => {
             playList.playIndex(playList.audioList.indexOf(audio));
         });
-        
-        let title = path.basename(audio._src) || "Unknown";  
+
+        let title = path.basename(audio._src) || "Unknown";
         let minutes = Math.round(audio.duration() / 60);
         let second = Math.round(audio.duration() % 60);
         song.innerHTML = `
                     <div class="song-index" >${index + 1})</div>
-                    <div class="song-title" title="${title}">${truncateString(title, 15)}</div>
+                    <div class="song-title" title="${title}">${truncateString(
+            title,
+            15
+        )}</div>
                     <div class="song-duration">${minutes}min ${second}s</div>
                 `;
+        song.classList.add("item");
         songList.appendChild(song);
         index++;
     });
@@ -46,6 +50,8 @@ module.exports.addSongsToSidebar = (playList, songList) => {
 
 module.exports.clearSidebar = (songList) => {
     songList.innerHTML = "";
-}
+};
 
-
+module.exports.higlightElement = (songList) => {
+    
+};
