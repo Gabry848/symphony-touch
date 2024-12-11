@@ -118,12 +118,19 @@ body {
     display: flex;
 }
 
+.song-delete {
+    margin-left: auto;
+    cursor: pointer;
+}
+
 .song-list div:hover {
     background-color: rgb(129, 129, 129);
 }
 
 .song-duration {
     margin-left: auto;
+    font-size: 13px;
+    color: rgb(158, 156, 156);
 }
 
 #file {
@@ -140,6 +147,10 @@ body {
 }
 
 #file:hover {
-    background-color: rgb(129, 129, 129);
+    background-color: black;
     color: white;
+}
+
+.playing {
+    background-color: rgb(0, 0, 0);
 }

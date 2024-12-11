@@ -18,6 +18,8 @@ class PlayList {
         this.index = 0;
         this.loop = loop;
         this.random = random;
+        this.onPlay = () => {};
+        this.onPause = () => {};
     }
 
     /**
@@ -87,6 +89,8 @@ class PlayList {
                 audio.play();
             }
         });
+        // function di callback
+        this.onPlay();
     }
 
     playIndex(index) {
@@ -102,6 +106,7 @@ class PlayList {
         try {
             if (this.audioList[this.index].playing()) {
                 this.audioList[this.index].pause();
+                this.onPause();
             } else {
                 this.play();
             }
@@ -151,6 +156,23 @@ class PlayList {
                 },
             })
         );
+    }
+
+    removeSong(audiopath, callback = () => {}) {
+        this.audioList = this.audioList.filter((audio) => {
+            if (audio._src != audiopath) {
+                return true;
+            }
+            audio.pause();
+            audio.unload();
+            return false;
+        });
+        if (this.index >= this.audioList.length) {
+            this.index = 0;
+        } 
+        this.play()
+
+        callback();
     }
 
     playNext(){

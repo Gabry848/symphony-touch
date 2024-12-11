@@ -1,10 +1,4 @@
-const {
-    app,
-    BrowserWindow,
-    ipcMain,
-    Tray,
-    nativeImage,
-} = require("electron");
+const { app, BrowserWindow, ipcMain, Tray, nativeImage } = require("electron");
 const path = require("path");
 const { Howl } = require("howler");
 const fs = require("fs");
@@ -97,12 +91,30 @@ ipcMain.on("get-audio-list", (e) => {
     });
 });
 
-// add music
-ipcMain.on("select-file", (e, path) => {
-    music.addMusicInJson(win, (filePath)=>{
-        console.log("select-file");
-        win.webContents.send("sidebar:reload", filePath);
-    });
-    
+ipcMain.on("audio:delete", (e, audioPath) => {
+    music.deleteMusicInJson(
+        audioPath,
+        (path) => {
+            win.webContents.send("sidebar:deleteMusic", path);
+        },
+        (err) => {
+            win.webContents.send("audio-error", {
+                error: err,
+            });
+        }
+    );
 });
 
+// add music
+ipcMain.on("select-file", (e, path) => {
+    music.addMusicInJson(
+        win,
+        (filePath) => {
+            console.log("select-file");
+            win.webContents.send("sidebar:addMusic", filePath);
+        },
+        (err) => {
+            win.webContents.send("audio-error", { error: err });
+        }
+    );
+});
