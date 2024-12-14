@@ -6,7 +6,6 @@ const SideBar = require("../scripts/sidebar.js");
 const errors = require("../scripts/errors.js");
 const ProgressBar = require("../scripts/progressbar.js");
 
-
 // event ipcrenderer per barra della finestra
 let buttonmin = document.getElementById("minimaze");
 let buttonres = document.getElementById("restore");
@@ -22,11 +21,11 @@ let progressArea = document.getElementById("progress-area");
 const sidebar = document.getElementById("sidebar");
 const container = sidebar.getElementsByClassName("container")[0];
 const songList = container.getElementsByClassName("song-list")[0];
-
+const shuffle = document.getElementById("shuffle");
 
 // creo una playlist ed il tracker della barra di progresso
 let myPlayList = new PlayList(false, true);
-let MyProgressBar = new ProgressBar(myPlayList);
+//let MyProgressBar = new ProgressBar(myPlayList);
 
 ipcRenderer.send("get-audio-list");
 ipcRenderer.on("get-audio-list", (e, arg) => {
@@ -55,7 +54,7 @@ myPlayList.onPlay = () => {
 
     // update progress bar
     //MyProgressBar.updateProgressBar();
-    MyProgressBar.updateTrackTime();
+    //MyProgressBar.updateTrackTime();
 };
 myPlayList.onPause = () => {
     playerTrack.classList.remove("active");
@@ -95,6 +94,17 @@ document.getElementById("file").addEventListener("click", () => {
     ipcRenderer.send("select-file");
 });
 
+// play random
+shuffle.addEventListener("click", () => {
+    if (myPlayList.random) {
+        myPlayList.random = false;
+        shuffle.classList.remove("active");
+    } else {
+        myPlayList.random = true;
+        shuffle.classList.add("active");
+    }
+});
+
 ipcRenderer.on("sidebar:addMusic", (event, path) => {
     SideBar.clearSidebar(songList);
     if (path) {
@@ -120,4 +130,3 @@ ipcRenderer.on("audio-error", (event, arg) => {
     console.error(arg["error"]);
     errors.showError(arg["error"]);
 });
-

@@ -17,7 +17,7 @@ class PlayList {
         this.audioList = [];
         this.index = 0;
         this.loop = loop;
-        this.random = random;
+        this._random = random;
         this.onPlay = () => {};
         this.onPause = () => {};
     }
@@ -211,6 +211,14 @@ class PlayList {
         } catch (e) {
             return false;
         }
+    }
+
+    get random() {
+        return this._random;
+    }
+
+    set random(value) {
+        this._random = value;
     }
 
 }

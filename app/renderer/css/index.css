@@ -154,3 +154,25 @@ body {
 .playing {
     background-color: rgb(0, 0, 0);
 }
+
+#shuffle {
+    position: absolute;
+    bottom: 13px;
+    left: 13px;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    background-color: #333;
+    border: solid 1px rgb(129, 129, 129);
+    opacity: 1;
+    cursor: pointer;
+}
+
+#shuffle:hover {
+    background-color: rgb(129, 129, 129);
+    color: white;
+}
+
+#shuffle.active {
+    background-color: rgb(0, 0, 0);
+}
