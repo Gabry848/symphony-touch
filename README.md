@@ -22,7 +22,7 @@ There will be both English and Italian comments in the code.
 1. 📥 Clone the repository:
 
    ```bash
-   git clone https://github.com/tuo-utente/music-player.git
+   git clone https://github.com/Gabry848/music-player.git
    cd music-player
    ```
 
