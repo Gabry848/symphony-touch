@@ -4,6 +4,8 @@ const path = require("path");
 const PlayList = require("../scripts/PlayList.js");
 const SideBar = require("../scripts/sidebar.js");
 const errors = require("../scripts/errors.js");
+const ProgressBar = require("../scripts/progressbar.js");
+
 
 // event ipcrenderer per barra della finestra
 let buttonmin = document.getElementById("minimaze");
@@ -16,14 +18,15 @@ let trackName = document.getElementById("track-name");
 let playPauseButton = document
     .getElementById("play-pause-button")
     .querySelector("i");
-
+let progressArea = document.getElementById("progress-area");
 const sidebar = document.getElementById("sidebar");
 const container = sidebar.getElementsByClassName("container")[0];
 const songList = container.getElementsByClassName("song-list")[0];
 
-// playlist
-// ipc renderer communication to get playlist
+
+// creo una playlist ed il tracker della barra di progresso
 let myPlayList = new PlayList(false, true);
+let MyProgressBar = new ProgressBar(myPlayList);
 
 ipcRenderer.send("get-audio-list");
 ipcRenderer.on("get-audio-list", (e, arg) => {
@@ -49,6 +52,10 @@ myPlayList.onPlay = () => {
 
     playPauseButton.classList.remove("fa-play");
     playPauseButton.classList.add("fa-pause");
+
+    // update progress bar
+    //MyProgressBar.updateProgressBar();
+    MyProgressBar.updateTrackTime();
 };
 myPlayList.onPause = () => {
     playerTrack.classList.remove("active");
@@ -109,8 +116,8 @@ ipcRenderer.on("sidebar:deleteMusic", (event, audioPath) => {
     });
 });
 
-
 ipcRenderer.on("audio-error", (event, arg) => {
     console.error(arg["error"]);
     errors.showError(arg["error"]);
 });
+

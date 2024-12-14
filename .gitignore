@@ -27,5 +27,5 @@ jspm_packages/
 # Windows system files
 Thumbs.db
 
-# music list
-app/shared/music.json
+# music 
+music.json

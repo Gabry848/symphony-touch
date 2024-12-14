@@ -193,6 +193,26 @@ class PlayList {
         this.play()
     }
 
+    get currentTime() {
+        return this.audioList[this.index].seek();
+    }
+
+    get audio() {
+        return this.audioList[this.index];
+    }
+
+    get duration() {
+        return this.audioList[this.index].duration();
+    }
+
+    get playing() {
+        try {
+            return this.audioList[this.index].playing();
+        } catch (e) {
+            return false;
+        }
+    }
+
 }
 
 module.exports = PlayList;
