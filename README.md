@@ -9,7 +9,7 @@ There will be both English and Italian comments in the code.
 - 🎵 **Local audio playback**: Supports common audio formats like MP3, WAV, and FLAC.
 - 📂 **Playlist management**: Create, edit, and save custom playlists.
 - ⏯️ **Basic controls**: Play, pause, stop, skip forward and backward.
-- 💻 **CLI interface**: A simple command-line interface to control the player.
+- 💻 **GUI interface**: A simple interface to control the player.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ There will be both English and Italian comments in the code.
 1. 📥 Clone the repository:
 
    ```bash
-   git clone https://github.com/Gabry848/music-player.git
+   git clone https://github.com/Gabry848/symphony-touch.git
    cd music-player
    ```
 
@@ -53,6 +53,7 @@ player/
 ├── .git/
 ├── .gitignore
 ├── README.md
+├── LICENSE.txt         # Licenza del progetto
 ├── package.json
 ├── package-lock.json
 ├── node_modules/
@@ -74,12 +75,6 @@ player/
         ├── costants.js
         ├── music.json
         └── settings.json
-package.json        # Configurazione npm
-README.md           # Documentazione
-.gitignore          # File da ignorare da Git
-package-lock.json   # File di lock di npm
-node_modules/       # Cartella dei moduli npm
-license.txt         # Licenza del progetto
 ```
 
 ## Screenshot
