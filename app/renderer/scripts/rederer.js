@@ -22,6 +22,9 @@ const sidebar = document.getElementById("sidebar");
 const container = sidebar.getElementsByClassName("container")[0];
 const songList = container.getElementsByClassName("song-list")[0];
 const shuffle = document.getElementById("shuffle");
+const popupSubmit = document.getElementById('popup-submit');
+const popupInput = document.getElementById('popup-input');
+const popupSongTitle = document.getElementById('popup-title');
 
 // creo una playlist ed il tracker della barra di progresso
 let myPlayList = new PlayList(false, true);
@@ -103,6 +106,12 @@ shuffle.addEventListener("click", () => {
         myPlayList.random = true;
         shuffle.classList.add("active");
     }
+});
+
+popupSubmit.addEventListener('click', () => {
+    // Invio evento 'download-mp3' al main con il valore di popup-input come parametro.
+    ipcRenderer.send('download-mp3', popupInput.value, popupSongTitle.value);
+    popup.classList.remove('active');
 });
 
 ipcRenderer.on("sidebar:addMusic", (event, path) => {

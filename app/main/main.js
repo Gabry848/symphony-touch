@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, Tray, nativeImage } = require("electron");
 const path = require("path");
-const { Howl } = require("howler");
+const { exec } = require("youtube-dl-exec");
 const fs = require("fs");
 
 const music = require("./scripts/music");
@@ -118,3 +118,20 @@ ipcMain.on("select-file", (e, path) => {
         }
     );
 });
+
+
+// Ascolta la richiesta dal renderer per scaricare un MP3
+ipcMain.on("download-mp3", async (_, videoUrl, title) => {
+    console.log("Download MP3 richiesto");
+    try {
+    
+    await exec(videoUrl, {
+      extractAudio: true,
+      audioFormat: "mp3",
+      output: path.join(app.getPath('music'), `${title}.mp3`),
+    });
+      return "Download completato";
+    } catch (error) {
+      return `Errore: ${error.message}`;
+    }
+  });

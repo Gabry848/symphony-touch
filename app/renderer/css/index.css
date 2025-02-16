@@ -1,4 +1,3 @@
-
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #000;
@@ -21,6 +20,8 @@ body {
 .rouded {
     border-radius: 30px;
     width: 100%;
+    margin: 0 auto;
+    max-width: 1200px; /* Modifica la larghezza se necessaria */
 }
 
 .menu-btn {
@@ -135,19 +136,25 @@ body {
 
 #file {
     position: absolute;
-    bottom: 13px;
-    right: 13px;
+    bottom: 20px;
+    right: 20px;
     border-radius: 10px;
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 10px;
     color: white;
     background-color: #333;
     border: solid 1px rgb(129, 129, 129);
     opacity: 1;
     cursor: pointer;
+    /* width: 36px; */
+    text-align: center;
 }
 
 #file:hover {
-    background-color: black;
+    background-color: rgb(129, 129, 129);
     color: white;
 }
 
@@ -175,4 +182,108 @@ body {
 
 #shuffle.active {
     background-color: rgb(0, 0, 0);
+}
+
+/* Aggiunte per il pop-up */
+#popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#popup.active {
+  display: flex;
+}
+
+/* Modifica per il popup a tema scuro */
+#popup .popup-content {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+#popup input {
+  width: 200px;
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #000;
+  color: #fff;
+  box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5);
+}
+
+#popup button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #555;
+  color: #fff;
+  cursor: pointer;
+}
+
+#popup button:hover {
+  background-color: #777;
+}
+
+#popup input {
+  width: 200px;
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #000;
+}
+
+#popup button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ddd;
+  color: #000;
+  cursor: pointer;
+}
+
+#popup button:hover {
+  background-color: #888;
+}
+
+/* Nuove regole per posizionare il bottone #open-popup-btn accanto a #shuffle */
+#sidebar .container h2 {
+  display: flex;
+  align-items: center;
+}
+
+/* Modifica di #open-popup-btn per avere la stessa larghezza di #shuffle */
+#open-popup-btn {
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  background-color: #333;
+  border: solid 1px rgb(129, 129, 129);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+  width: 36px; /* larghezza uguale a quella di #shuffle */
+  text-align: center;
+
+  position: absolute;
+  bottom: 13px;
+  left: 53px; /* posizionamento accanto a #shuffle */
+}
+
+#open-popup-btn:hover {
+  background-color: rgb(129, 129, 129);
+  color: white;
 }

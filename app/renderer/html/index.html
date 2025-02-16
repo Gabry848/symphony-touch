@@ -131,19 +131,54 @@
                     <path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" />
                     <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" />
                     <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" />
-
                 </svg>
+                <button id="open-popup-btn">
+                    <i class="fas fa-download"></i>
+                </button>
             </h2>
 
             <div class="song-list"></div>
         </div>
     </div>
 
-    <div id="file">Add music</div>
+    <div id="file">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-file-plus-2">
+            <path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4" />
+            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+            <path d="M3 15h6" />
+            <path d="M6 12v6" />
+        </svg>
+    </div>
+
+    <div id="popup">
+        <div class="popup-content">
+            <h3>Scarica musica da youtube</h3>
+            <input type="text" id="popup-title" placeholder="Inserisci il titolo che vuoi dare" />
+            <input type="text" id="popup-input" placeholder="Inserisci il link di youtube" />
+            <button id="popup-submit">Scarica</button>
+        </div>
+    </div>
 
     <style></style>
 
     <script src="../scripts/rederer.js"></script>
+    <script>
+        const popup = document.getElementById('popup');
+        const openPopupBtn = document.getElementById('open-popup-btn');
+        
+
+        openPopupBtn.addEventListener('click', () => {
+            popup.classList.add('active');
+        });
+
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                popup.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 
 </html>
