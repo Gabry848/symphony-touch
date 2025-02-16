@@ -8,130 +8,149 @@ const music = require("./scripts/music");
 let win;
 
 function createWindow() {
-    win = new BrowserWindow({
-        height: 630,
-        width: 1000,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-        },
-        //icon: path.join(__dirname, 'assets', 'img', 'icon.png'),
-        title: "Symphony Touch",
-        frame: false,
-    });
+  win = new BrowserWindow({
+    height: 630,
+    width: 1000,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+    //icon: path.join(__dirname, 'assets', 'img', 'icon.png'),
+    title: "Symphony Touch",
+    frame: false,
+  });
 
-    win.setTitle("Symphony Touch");
-    win.loadFile("app\\renderer\\html\\index.html");
+  win.setTitle("Symphony Touch");
+  win.loadFile("app\\renderer\\html\\index.html");
 
-    //win.webContents.openDevTools();
-    win.on("minimize", (event) => {
-        event.preventDefault();
-        win.setSkipTaskbar(true);
-    });
+  //win.webContents.openDevTools();
+  win.on("minimize", (event) => {
+    event.preventDefault();
+    win.setSkipTaskbar(true);
+  });
 }
 
 app.whenReady().then(() => {
-    createWindow();
-    let icon = nativeImage.createFromPath(
-        "app\\renderer\\assets\\image\\icons\\logo.png"
-    );
-    let tray = new Tray(icon);
-    tray.setTitle("Symphony Touch");
-    tray.setToolTip("Symphony Touch");
-    tray.on("double-click", () => {
-        win.show();
-    });
+  createWindow();
+  let icon = nativeImage.createFromPath(
+    "app\\renderer\\assets\\image\\icons\\logo.png"
+  );
+  let tray = new Tray(icon);
+  tray.setTitle("Symphony Touch");
+  tray.setToolTip("Symphony Touch");
+  tray.on("double-click", () => {
+    win.show();
+  });
 });
 
 app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
-        app.quit();
-    }
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
 });
 
 app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-    }
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
 });
 
 // window control
 ipcMain.on("window:minimize", (e) => {
-    win.minimize();
+  win.minimize();
 });
 ipcMain.on("window:restore", (e) => {
-    if (win.isMaximized()) {
-        win.restore();
-    } else {
-        win.maximize();
-    }
+  if (win.isMaximized()) {
+    win.restore();
+  } else {
+    win.maximize();
+  }
 });
 ipcMain.on("window:close", (e) => {
-    win.close();
+  win.close();
 });
 
 // music player
-
 ipcMain.on("get-audio-list", (e) => {
-    let audioList = [];
-    let audioPath = path.join("app\\shared\\music.json");
-    fs.readFile(audioPath, "utf8", (err, data) => {
-        if (err) {
-            console.error("Error reading music.json:", err);
-            return;
+  let audioList = [];
+  let audioPath = path.join(app.getPath("music"), "music.json");
+  fs.readFile(audioPath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading music.json:", err);
+      fs.writeFile(audioPath, JSON.stringify([]), (writeErr) => {
+        if (writeErr) {
+          console.error("Error creating music.json:", writeErr);
+        } else {
+          e.reply("get-audio-list", {
+            audioList: [],
+          });
         }
-        try {
-            audioList = JSON.parse(data);
-            e.reply("get-audio-list", {
-                audioList: audioList || [],
-            });
-        } catch (parseErr) {
-            console.error("Error parsing music.json:", parseErr);
-        }
-    });
+      });
+      return;
+    }
+    try {
+      audioList = JSON.parse(data);
+      e.reply("get-audio-list", {
+        audioList: audioList || [],
+      });
+    } catch (parseErr) {
+      console.error("Error parsing music.json:", parseErr);
+    }
+  });
 });
 
 ipcMain.on("audio:delete", (e, audioPath) => {
-    music.deleteMusicInJson(
-        audioPath,
-        (path) => {
-            win.webContents.send("sidebar:deleteMusic", path);
-        },
-        (err) => {
-            win.webContents.send("audio-error", {
-                error: err,
-            });
-        }
-    );
+  music.deleteMusicInJson(
+    app,
+    audioPath,
+    (path) => {
+      win.webContents.send("sidebar:deleteMusic", path);
+    },
+    (err) => {
+      win.webContents.send("audio-error", {
+        error: err,
+      });
+    }
+  );
 });
 
 // add music
 ipcMain.on("select-file", (e, path) => {
-    music.addMusicInJson(
-        win,
-        (filePath) => {
-            console.log("select-file");
-            win.webContents.send("sidebar:addMusic", filePath);
-        },
-        (err) => {
-            win.webContents.send("audio-error", { error: err });
-        }
-    );
+  music.addMusicInJson(
+    app,
+    win,
+    (filePath) => {
+      console.log("select-file");
+      win.webContents.send("sidebar:addMusic", filePath);
+    },
+    (err) => {
+      win.webContents.send("audio-error", { error: err });
+    }
+  );
 });
-
 
 // Ascolta la richiesta dal renderer per scaricare un MP3
 ipcMain.on("download-mp3", async (_, videoUrl, title) => {
-    console.log("Download MP3 richiesto");
-    try {
-    
+
+  console.log("Download MP3 richiesto");
+  
+  try {
     await exec(videoUrl, {
       extractAudio: true,
       audioFormat: "mp3",
-      output: path.join(app.getPath('music'), `${title}.mp3`),
+      output: path.join(app.getPath("music"), `${title}.mp3`),
     });
-      return "Download completato";
-    } catch (error) {
-      return `Errore: ${error.message}`;
-    }
-  });
+    console.log("Download completato");
+    music.writeJson(app, path.join(app.getPath("music"), `${title}.mp3`), 
+    (filePath) => {
+      win.webContents.send("sidebar:addMusic", filePath);
+    },
+    (err) => {
+      win.webContents.send("audio-error", { error: err });
+      win.webContents.send("sidebar:reload");
+    });
+
+  } catch (error) {
+    return `Errore: ${error.message}`;
+  }
+});

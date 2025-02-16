@@ -2,14 +2,55 @@ const { dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
 
-const { MUSIC_PATH } = require("../../shared/music.json");
-const { on } = require("events");
 
-module.exports = {
-    // Funzioni e variabili da esportare
-};
+module.exports.writeJson = (app, filePath, callback, onError)=> {
+    console.log("writeJson");
+    fs.readFile(path.join(app.getPath("music"), `music.json`), "utf8", (err, data) => {
+        if (err) {
+            console.error("Errore nella lettura del file JSON:", err);
+            onError(err);
+            return;
+        }
+        let musicList;
+        try {
+            musicList = JSON.parse(data);
+        } catch (parseErr) {
+            console.error("Errore nel parsing del file JSON:", parseErr);
+            onError(parseErr);
+            return;
+        }
 
+        // Verifica se il filePath è già presente nella lista
+        if (musicList.includes(filePath)) {
+            console.log("File gia` presente nella lista");
+            onError("File gia` presente nella lista");
+            return;
+        }
+        // Aggiungi il nuovo filePath alla lista
+        musicList.push(filePath);
+
+        // Scrivi di nuovo il file JSON aggiornato
+        fs.writeFile(
+            path.join(app.getPath("music"), `music.json`),
+            JSON.stringify(musicList, null, 2),
+            "utf8",
+            (writeErr) => {
+                if (writeErr) {
+                    console.error(
+                        "Errore nella scrittura del file JSON:",
+                        writeErr
+                    );
+                    onError(writeErr);
+                    return;
+                }
+                console.log("File JSON aggiornato con successo");
+                callback(filePath);
+            }
+        );
+    })
+}
 module.exports.addMusicInJson = (
+    app,
     win,
     callback = () => {},
     onError = () => {}
@@ -31,59 +72,18 @@ module.exports.addMusicInJson = (
         }
 
         const filePath = e.filePaths[0];
-        fs.readFile("app\\shared\\music.json", "utf8", (err, data) => {
-            if (err) {
-                console.error("Errore nella lettura del file JSON:", err);
-                onError(err);
-                return;
-            }
-            let musicList;
-            try {
-                musicList = JSON.parse(data);
-            } catch (parseErr) {
-                console.error("Errore nel parsing del file JSON:", parseErr);
-                onError(parseErr);
-                return;
-            }
-
-            // Verifica se il filePath è già presente nella lista
-            if (musicList.includes(filePath)) {
-                console.log("File gia` presente nella lista");
-                onError("File gia` presente nella lista");
-                return;
-            }
-            // Aggiungi il nuovo filePath alla lista
-            musicList.push(filePath);
-
-            // Scrivi di nuovo il file JSON aggiornato
-            fs.writeFile(
-                "app\\shared\\music.json",
-                JSON.stringify(musicList, null, 2),
-                "utf8",
-                (writeErr) => {
-                    if (writeErr) {
-                        console.error(
-                            "Errore nella scrittura del file JSON:",
-                            writeErr
-                        );
-                        onError(writeErr);
-                        return;
-                    }
-                    console.log("File JSON aggiornato con successo");
-                    callback(filePath);
-                }
-            );
-        });
+        module.exports.writeJson(app, filePath, callback, onError);
     });
 };
 
 module.exports.deleteMusicInJson = (
-    path,
+    app,
+    filePath,
     onLoad = () => {},
     onError = () => {}
 ) => {
     // elimina un file dalla lista json
-    fs.readFile("app\\shared\\music.json", "utf8", (err, data) => {
+    fs.readFile(path.join(app.getPath("music"), `music.json`), "utf8", (err, data) => {
         if (err) {
             console.error("Errore nella lettura del file JSON:", err);
             onError(err);
@@ -100,12 +100,12 @@ module.exports.deleteMusicInJson = (
 
         // Rimuovi il filePath dalla lista
         const updatedMusicList = musicList.filter(
-            (musicPath) => musicPath !== path
+            (musicPath) => musicPath !== filePath
         );
 
         // Scrivi di nuovo il file JSON aggiornato
         fs.writeFile(
-            "app\\shared\\music.json",
+            path.join(app.getPath("music"), `music.json`),
             JSON.stringify(updatedMusicList, null, 2),
             "utf8",
             (writeErr) => {
@@ -118,7 +118,7 @@ module.exports.deleteMusicInJson = (
                     return;
                 }
                 console.log("File JSON aggiornato con successo");
-                onLoad(path);
+                onLoad(filePath);
             }
         );
     });

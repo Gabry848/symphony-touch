@@ -1,12 +1,10 @@
 {
-    "basicPath": "C:\\Users\\User\\Desktop\\Progetti\\javascript\\Music player\\player",
     "volume": 0.75,
     "playbackSpeed": 1.0,
-    "theme": "dark",
+    "theme": "dark"
     // "equalizer": {
     //     "bass": 5,
     //     "mid": 5,
     //     "treble": 5
     // },
-    "playlist": ["song1.mp3", "song2.mp3", "song3.mp3"]
 }
