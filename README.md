@@ -10,12 +10,15 @@ There will be both English and Italian comments in the code.
 - 📂 **Playlist management**: Create, edit, and save custom playlists.
 - ⏯️ **Basic controls**: Play, pause, stop, skip forward and backward.
 - 💻 **GUI interface**: A simple interface to control the player.
+- ▶️ **Download music from youtube** directlly in the app 
 
 ## Requirements
 
 🖥️📦🖥️  
 - 🖥️ **Node.js** (version 16 or higher)  
 - 📦 **npm** (version 8 or higher)
+- **python** and the library  **yt-dlp**
+- **ffmpeg**
 
 ## Installation
 
