@@ -3,7 +3,18 @@ const path = require("path");
 const { exec } = require("youtube-dl-exec");
 const fs = require("fs");
 
-const music = require("./scripts/music");
+const MusicManager = require("./scripts/music");
+
+//gestione musica file json
+let music = new MusicManager(
+  app,
+  (filePath) => {
+    win.webContents.send("sidebar:addMusic", filePath);
+  },
+  (err) => {
+    win.webContents.send("audio-error", { error: err });
+  }
+);
 
 let win;
 
@@ -100,57 +111,38 @@ ipcMain.on("get-audio-list", (e) => {
 });
 
 ipcMain.on("audio:delete", (e, audioPath) => {
-  music.deleteMusicInJson(
-    app,
-    audioPath,
-    (path) => {
-      win.webContents.send("sidebar:deleteMusic", path);
-    },
-    (err) => {
-      win.webContents.send("audio-error", {
-        error: err,
-      });
-    }
-  );
+  music.deleteFile(audioPath, (path) => {
+    win.webContents.send("sidebar:deleteMusic", path);
+  });
 });
 
 // add music
 ipcMain.on("select-file", (e, path) => {
-  music.addMusicInJson(
-    app,
-    win,
-    (filePath) => {
-      console.log("select-file");
-      win.webContents.send("sidebar:addMusic", filePath);
-    },
-    (err) => {
-      win.webContents.send("audio-error", { error: err });
-    }
-  );
+  music.addMusicFromDialog(win);
 });
 
 // Ascolta la richiesta dal renderer per scaricare un MP3
 ipcMain.on("download-mp3", async (_, videoUrl, title) => {
-
   console.log("Download MP3 richiesto");
-  
+
   try {
     await exec(videoUrl, {
       extractAudio: true,
       audioFormat: "mp3",
       output: path.join(app.getPath("music"), `${title}.mp3`),
     });
-    console.log("Download completato");
-    music.writeJson(app, path.join(app.getPath("music"), `${title}.mp3`), 
-    (filePath) => {
-      win.webContents.send("sidebar:addMusic", filePath);
-    },
-    (err) => {
-      win.webContents.send("audio-error", { error: err });
-      win.webContents.send("sidebar:reload");
-    });
 
+    console.log("Download completato");
+
+    music.addFile(
+      path.join(app.getPath("music"), `${title}.mp3`),
+      null,
+      (err) => {
+        win.webContents.send("audio-error", { error: err });
+        win.webContents.send("sidebar:reload");
+      }
+    );
   } catch (error) {
-    return `Errore: ${error.message}`;
+    win.webContents.send("audio-error", { error });
   }
 });
