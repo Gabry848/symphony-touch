@@ -83,7 +83,7 @@ player/
 ## Screenshot
 
 🖼️
-![Music Player Screenshot](./screenshot/screenshot1.png)
+![Music Player Screenshot](./screenshot/screen.png)
 
 ## Key dependencies
 
