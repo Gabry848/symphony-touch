@@ -221,6 +221,10 @@ class PlayList {
         this._random = value;
     }
 
+    setVolume(value) {
+        // se tglobal volume
+        Howler.Howler.volume(value);
+    }
 }
 
 module.exports = PlayList;

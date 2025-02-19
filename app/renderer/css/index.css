@@ -164,8 +164,8 @@ body {
 
 #shuffle {
     position: absolute;
-    bottom: 13px;
-    left: 13px;
+    bottom: 20px;
+    right: 300px;
     border-radius: 10px;
     padding: 10px;
     color: white;
@@ -279,11 +279,53 @@ body {
   text-align: center;
 
   position: absolute;
-  bottom: 13px;
-  left: 53px; /* posizionamento accanto a #shuffle */
+  bottom: 20px;
+  right: 70px; /* posizionamento accanto a #shuffle */
 }
 
 #open-popup-btn:hover {
   background-color: rgb(129, 129, 129);
   color: white;
+}
+
+#volume-slider {
+  width: 150px;
+  cursor: pointer;
+  appearance: none;
+  background: #555; /* ...esempio di colore coerente con il resto dell’app... */
+  border-radius: 4px;
+  outline: none;
+  height: 4px;
+}
+
+#volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #eee;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+#volume-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#volume-icon {
+    color: #fff;
+    font-size: 18px;
+}
+
+#volume-icon-container {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

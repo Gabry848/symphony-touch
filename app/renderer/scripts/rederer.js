@@ -25,6 +25,7 @@ const shuffle = document.getElementById("shuffle");
 const popupSubmit = document.getElementById('popup-submit');
 const popupInput = document.getElementById('popup-input');
 const popupSongTitle = document.getElementById('popup-title');
+const volumeSlider = document.getElementById("volume-slider");
 
 // creo una playlist ed il tracker della barra di progresso
 let myPlayList = new PlayList(false, true);
@@ -138,4 +139,21 @@ ipcRenderer.on("sidebar:deleteMusic", (event, audioPath) => {
 ipcRenderer.on("audio-error", (event, arg) => {
     console.error(arg["error"]);
     errors.showError(arg["error"]);
+});
+
+function updateVolumeIcon(volume) {
+    const icon = document.getElementById("volume-icon");
+    if (volume <= 0) {
+        icon.className = "fas fa-volume-mute";
+    } else if (volume < 0.5) {
+        icon.className = "fas fa-volume-down";
+    } else {
+        icon.className = "fas fa-volume-up";
+    }
+}
+
+volumeSlider.addEventListener("input", (event) => {
+    const vol = event.target.value / 100;
+    myPlayList.setVolume(vol);
+    updateVolumeIcon(vol);
 });
