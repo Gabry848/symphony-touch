@@ -5,6 +5,7 @@ const PlayList = require("../scripts/PlayList.js");
 const SideBar = require("../scripts/sidebar.js");
 const errors = require("../scripts/errors.js");
 const ProgressBar = require("../scripts/progressbar.js");
+const AudioVisualizer = require("../scripts/AudioVisualizer.js");
 
 // event ipcrenderer per barra della finestra
 let buttonmin = document.getElementById("minimaze");
@@ -29,7 +30,8 @@ const volumeSlider = document.getElementById("volume-slider");
 
 // creo una playlist ed il tracker della barra di progresso
 let myPlayList = new PlayList(false, true);
-//let MyProgressBar = new ProgressBar(myPlayList);
+let MyProgressBar = new ProgressBar(myPlayList);
+let myVisualizer = new AudioVisualizer('audio-visualizer');
 
 ipcRenderer.send("get-audio-list");
 ipcRenderer.on("get-audio-list", (e, arg) => {
@@ -57,8 +59,14 @@ myPlayList.onPlay = () => {
     playPauseButton.classList.add("fa-pause");
 
     // update progress bar
-    //MyProgressBar.updateProgressBar();
-    //MyProgressBar.updateTrackTime();
+    MyProgressBar.start();
+
+    // Initialize and resume visualizer
+    if (!myVisualizer.isActive) {
+        myVisualizer.initialize(myPlayList.audio);
+    } else {
+        myVisualizer.resume();
+    }
 };
 myPlayList.onPause = () => {
     playerTrack.classList.remove("active");
@@ -66,6 +74,12 @@ myPlayList.onPause = () => {
 
     playPauseButton.classList.remove("fa-pause");
     playPauseButton.classList.add("fa-play");
+
+    // stop progress bar
+    MyProgressBar.stop();
+
+    // Stop visualizer
+    myVisualizer.stop();
 };
 
 // gestione finestra
@@ -156,4 +170,18 @@ volumeSlider.addEventListener("input", (event) => {
     const vol = event.target.value / 100;
     myPlayList.setVolume(vol);
     updateVolumeIcon(vol);
+});
+
+// Visualizer mode controls
+const vizModeButtons = document.querySelectorAll('.viz-mode-btn');
+vizModeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        vizModeButtons.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        btn.classList.add('active');
+        // Set visualizer mode
+        const mode = btn.dataset.mode;
+        myVisualizer.setMode(mode);
+    });
 });

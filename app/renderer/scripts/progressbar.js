@@ -1,61 +1,97 @@
 class ProgressBar {
-    constructor(
-        playList,
-        track_lenght = "track-lenght",
-        current_time = "current-time"
-    ) {
+    constructor(playList) {
         this.playList = playList;
         this.duration = 0;
-        //this.progressBar = document.getElementById(progressbar);
-        this.trackLength = document.getElementById(track_lenght);
-        this.currentTime = document.getElementById(current_time);
+        this.progressBar = document.getElementById("seek-bar");
+        this.sArea = document.getElementById("s-area");
+        this.trackLength = document.getElementById("track-length");
+        this.currentTime = document.getElementById("current-time");
+        this.insTime = document.getElementById("ins-time");
+        this.sHover = document.getElementById("s-hover");
+        this.trackTime = document.getElementById("track-time");
+        this.isUpdating = false;
+
+        this.setupInteractivity();
+    }
+
+    setupInteractivity() {
+        // Click sulla seekbar per navigare
+        this.sArea.addEventListener("click", (e) => {
+            const rect = this.sArea.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            const seekTo = percent * this.playList.duration;
+            this.playList.audio.seek(seekTo);
+        });
+
+        // Hover sulla seekbar per mostrare tempo
+        this.sArea.addEventListener("mousemove", (e) => {
+            const rect = this.sArea.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            const hoverTime = percent * this.playList.duration;
+
+            const hoverMin = Math.floor(hoverTime / 60);
+            const hoverSec = Math.floor(hoverTime % 60);
+            const formattedSec = hoverSec < 10 ? `0${hoverSec}` : hoverSec;
+
+            this.insTime.innerText = `${hoverMin}:${formattedSec}`;
+            this.insTime.style.left = `${e.clientX - rect.left}px`;
+            this.insTime.style.display = "block";
+
+            this.sHover.style.width = `${percent * 100}%`;
+        });
+
+        this.sArea.addEventListener("mouseleave", () => {
+            this.insTime.style.display = "none";
+            this.sHover.style.width = "0";
+        });
     }
 
     updateProgressBar() {
-        if (this.playList.playing) {
-            let currentTime = this.playList.currentTime;
-            let duration = this.playList.duration;
-            let progress = (currentTime / duration) * 100;
-            progressBar.style.width = progress + "%";
+        if (this.playList.playing && this.playList.audio) {
+            const currentTime = this.playList.currentTime;
+            const duration = this.playList.duration;
+            const progress = (currentTime / duration) * 100;
             this.progressBar.style.width = progress + "%";
         }
     }
 
     updateTrackTime() {
-        let currentTime = this.playList.currentTime;
-        console.log("Duration", duration);
-        console.log("Current Time", currentTime);
+        if (!this.playList.audio) return;
 
-        let durationMin = Math.floor(this.duration / 60);
-        let durationSec = Math.floor(this.duration % 60);
-        let currentMin = Math.floor(currentTime / 60);
-        let currentSec = Math.floor(currentTime % 60);
+        const currentTime = this.playList.currentTime;
+        const duration = this.playList.duration;
 
-        if (durationSec < 10) {
-            durationSec = `0${durationSec}`;
-        }
-        if (currentSec < 10) {
-            currentSec = `0${currentSec}`;
-        }
+        const durationMin = Math.floor(duration / 60);
+        const durationSec = Math.floor(duration % 60);
+        const currentMin = Math.floor(currentTime / 60);
+        const currentSec = Math.floor(currentTime % 60);
 
-        document.getElementById(
-            "track-length"
-        ).innerText = `${durationMin}:${durationSec}`;
-        document.getElementById(
-            "current-time"
-        ).innerText = `${currentMin}:${currentSec}`;
+        const formattedDurationSec = durationSec < 10 ? `0${durationSec}` : durationSec;
+        const formattedCurrentSec = currentSec < 10 ? `0${currentSec}` : currentSec;
+
+        this.trackLength.innerText = `${durationMin}:${formattedDurationSec}`;
+        this.currentTime.innerText = `${currentMin}:${formattedCurrentSec}`;
     }
 
     update() {
+        if (!this.isUpdating) return;
+
         this.updateProgressBar();
         this.updateTrackTime();
 
         requestAnimationFrame(this.update.bind(this));
     }
 
-    onPLaySong() {
+    start() {
+        this.isUpdating = true;
         this.duration = this.playList.duration;
+        this.trackTime.classList.add("active");
         this.update();
+    }
+
+    stop() {
+        this.isUpdating = false;
+        this.trackTime.classList.remove("active");
     }
 }
 
