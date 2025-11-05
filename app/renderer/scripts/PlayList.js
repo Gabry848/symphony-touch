@@ -225,6 +225,46 @@ class PlayList {
         // se tglobal volume
         Howler.Howler.volume(value);
     }
+
+    // Metodi per riordinare le tracce
+    moveTrack(fromIndex, toIndex) {
+        if (fromIndex < 0 || fromIndex >= this.audioList.length ||
+            toIndex < 0 || toIndex >= this.audioList.length) {
+            return false;
+        }
+
+        const wasPlaying = this.playing;
+        const currentTrack = this.audioList[this.index];
+
+        // Sposta l'elemento nell'array
+        const [movedItem] = this.audioList.splice(fromIndex, 1);
+        this.audioList.splice(toIndex, 0, movedItem);
+
+        // Aggiorna l'indice corrente
+        if (this.index === fromIndex) {
+            this.index = toIndex;
+        } else if (fromIndex < this.index && toIndex >= this.index) {
+            this.index--;
+        } else if (fromIndex > this.index && toIndex <= this.index) {
+            this.index++;
+        }
+
+        return true;
+    }
+
+    moveTrackUp(index) {
+        if (index > 0) {
+            return this.moveTrack(index, index - 1);
+        }
+        return false;
+    }
+
+    moveTrackDown(index) {
+        if (index < this.audioList.length - 1) {
+            return this.moveTrack(index, index + 1);
+        }
+        return false;
+    }
 }
 
 module.exports = PlayList;

@@ -120,6 +120,24 @@
         </div>
     </div>
 
+    <div id="visualizer-container">
+        <div id="visualizer-header">
+            <span id="visualizer-title">Audio Visualizer</span>
+            <div id="visualizer-controls">
+                <button class="viz-mode-btn active" data-mode="bars" title="Barre">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+                <button class="viz-mode-btn" data-mode="circular" title="Circolare">
+                    <i class="fas fa-circle-notch"></i>
+                </button>
+                <button class="viz-mode-btn" data-mode="wave" title="Onda">
+                    <i class="fas fa-water"></i>
+                </button>
+            </div>
+        </div>
+        <canvas id="audio-visualizer"></canvas>
+    </div>
+
     <div id="sidebar">
         <div class="container">
             <h2>Playlist
@@ -169,6 +187,7 @@
         <input type="range" min="0" max="100" value="50" id="volume-slider" />
     </div>
 
+    <script src="../scripts/AudioVisualizer.js"></script>
     <script src="../scripts/rederer.js"></script>
     <script>
         const popup = document.getElementById('popup');
